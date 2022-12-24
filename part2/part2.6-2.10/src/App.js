@@ -1,4 +1,11 @@
 import {useState} from 'react'
+import {useEffect} from 'react'
+import axios from 'axios'
+
+
+
+
+
 
 const Filter = (props) => {
   return (
@@ -40,33 +47,23 @@ const Record = (props) => {
 
 
 const App = () => {
-  const [persons,SetPersons] = useState([
-    {
-      'name':'Agustinus',
-      'number':'08123456'
-    },
-    {
-      'name':'Batubara',
-      'number':'081222344'
-    },
-    {
-      'name':'Lurah',
-      'number':'082342390'
-    },
-    {
-      'name':'Tampan',
-      'number':'085746253838'
-    }
-  ])
-  
+  const [persons,SetPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber] = useState('')
   const[newSearch,setNewSearch] = useState('')
+  const[newFilterResult,setNewFilterResult] = useState([])
 
-  const personsForFilter = [...persons]
-  const[newFilterResult,setNewFilterResult] = useState(
-      personsForFilter
-  )
+
+    
+  useEffect(()=>{
+    axios.get('http://localhost:3001/persons').
+      then(response=>{
+      SetPersons(response.data)
+      setNewFilterResult(response.data)  
+    })
+  },[])
+
+  console.log(newFilterResult)
 
 
 
