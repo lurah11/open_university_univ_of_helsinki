@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan')
 
 const app = express() 
 app.use(express.json())
@@ -27,6 +28,16 @@ let persons = [
     }
 ]
 
+//create new custom morgan token to hold the data 
+morgan.token('data',(req,res)=>JSON.stringify(req.body))
+
+//create custom morgan format 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
+
+
+
+
+
 app.get('/',(request,response)=>{
     response.send('<h1>Herro Warudo ( Hello World )</h1>')
 })
@@ -54,6 +65,7 @@ app.get('/api/persons/:id',(request,response)=>{
 })
 
 app.post('/api/persons',(request,response)=>{
+    console.log(request.body)
     const newID = parseInt(Math.random()*10000)
     const name = request.body["name"]
     const number = request.body["number"]
